@@ -1,13 +1,11 @@
 package behaviortree.graphBT.features;
 
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.IReason;
 import org.eclipse.graphiti.features.context.IUpdateContext;
 import org.eclipse.graphiti.features.impl.AbstractUpdateFeature;
 import org.eclipse.graphiti.features.impl.Reason;
 import org.eclipse.graphiti.mm.algorithms.Text;
-import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 
@@ -29,13 +27,19 @@ public class UpdateGraphBtFeature extends AbstractUpdateFeature {
         // return true, if linked business object is a StandardNode
     	PictogramElement pictogramElement = context.getPictogramElement();
     	Object bo = getBusinessObjectForPictogramElement(pictogramElement);
-        Object oSN = getBusinessObjectForPictogramElement(((Shape)context.getPictogramElement()).getContainer());
-       	StandardNode node = (StandardNode) oSN;
+        //Object oSN = getBusinessObjectForPictogramElement(((Shape)context.getPictogramElement()).getContainer());
+       	//StandardNode node = (StandardNode) oSN;
         
         System.out.println("in update check if standard node: " + (bo instanceof StandardNode));
         
         //this.getAllBusinessObjectsForPictogramElement(context.getPictogramElement());
-        return ((bo instanceof StandardNode)||(bo instanceof Component)||(bo instanceof Behavior));
+        //return ((bo instanceof StandardNode)||(bo instanceof Component)||(bo instanceof Behavior));
+        return ((bo instanceof StandardNode) ||
+        		(bo instanceof Component) || 
+        		(bo instanceof Behavior) ||
+        		(bo instanceof Requirements) ||
+        		(bo instanceof TraceabilityStatus) ||
+        		(bo instanceof Operator));
     }
  
     public IReason updateNeeded(IUpdateContext context) {
@@ -53,6 +57,9 @@ public class UpdateGraphBtFeature extends AbstractUpdateFeature {
 		}
 		else if (bo instanceof Behavior) {
 			businessName = node.getBehavior().getBehaviorName();
+		}
+		else if (bo instanceof Requirements) {
+			businessName = node.getTraceabilityLink().getRequirement();
 		}
 		
 
@@ -77,7 +84,7 @@ public class UpdateGraphBtFeature extends AbstractUpdateFeature {
         Object bo = getBusinessObjectForPictogramElement(pictogramElement);
         Object oSN = getBusinessObjectForPictogramElement(((Shape)context.getPictogramElement()).getContainer());
        	StandardNode node = (StandardNode) oSN;
-        System.out.println("in update.. value of bo "+bo);
+        System.out.println("in update.. value of bo " + bo);
         // Set name in pictogram model
         if (bo instanceof Component) {
         	businessName = node.getComponent().getComponentName();
@@ -89,7 +96,16 @@ public class UpdateGraphBtFeature extends AbstractUpdateFeature {
              }
         }
         if (bo instanceof Behavior) {
-        	businessName = node.getBehavior().getBehaviorName();
+        	businessName = node.getBehavior().toString( );
+            Shape shape = (Shape) pictogramElement;
+                if (shape.getGraphicsAlgorithm() instanceof Text) {
+                    Text text = (Text) shape.getGraphicsAlgorithm();
+                    text.setValue(businessName);
+                    return true;
+             }
+        }
+        if (bo instanceof Requirements) {
+        	businessName = node.getTraceabilityLink().getRequirement();
             Shape shape = (Shape) pictogramElement;
                 if (shape.getGraphicsAlgorithm() instanceof Text) {
                     Text text = (Text) shape.getGraphicsAlgorithm();

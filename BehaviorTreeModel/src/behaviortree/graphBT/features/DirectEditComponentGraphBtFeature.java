@@ -33,7 +33,13 @@ public class DirectEditComponentGraphBtFeature extends AbstractDirectEditingFeat
 	public int getEditingType() {
 		// there are several possible editor-types supported:
 		// text-field, checkbox, color-chooser, combobox, ...
-		return TYPE_TEXT;
+		PictogramElement pe = this.getFeatureProvider().getDirectEditingInfo().getPictogramElement();//
+		Object bo = getBusinessObjectForPictogramElement(pe);
+		
+//		if(bo instanceof TraceabilityStatus || bo instanceof Operator)
+//			return TYPE_DROPDOWN_READ_ONLY;
+//		else
+			return TYPE_TEXT;
 	}
  
 	@Override
@@ -47,19 +53,27 @@ public class DirectEditComponentGraphBtFeature extends AbstractDirectEditingFeat
 		System.out.println("bisa direct edit gak sih? bo instanceof StandardNode kah?" + (bo instanceof StandardNode));
 		
 		if (bo instanceof StandardNode && ga instanceof Text) {
-			System.out.println("bisa direct edit di true gak sih?");
+			System.out.println("can direct edit: StandardNode");
 			return true;
 		}
 		if (bo instanceof Component && ga instanceof Text) {
-			System.out.println("bisa.. ternyata dia komponen sir");
+			System.out.println("can direct edit: Component");
 			return true;
 		}
 		if (bo instanceof Behavior && ga instanceof Text) {
-			System.out.println("bisa.. ternyata dia behavior sir");
+			System.out.println("can direct edit: Behavior");
 			return true;
 		}
 		if (bo instanceof Requirements && ga instanceof Text) {
-			System.out.println("bisa.. ternyata dia behavior sir");
+			System.out.println("can direct edit: Requirements");
+			return true;
+		}
+		if (bo instanceof TraceabilityStatus && ga instanceof Text) {
+			System.out.println("can direct edit: TraceabilityStatus");
+			return true;
+		}
+		if (bo instanceof Operator && ga instanceof Text) {
+			System.out.println("can direct edit: Operator");
 			return true;
 		}
 		
@@ -85,15 +99,13 @@ public class DirectEditComponentGraphBtFeature extends AbstractDirectEditingFeat
 			return node.getBehavior().getBehaviorName();
 		}
 		//if the direct-edited object is an instance of operator
-		/*else if(object instanceof Operator) {
-			System.out.println("object instanceof operator");
-			node.setOperator(Operator.get(value));
+		else if(ob instanceof Operator) {
+			node.getOperator().getLiteral();
 		}
 		//if the direct-edited object is and instance of traceability status
-		else if(object instanceof TraceabilityStatus) {
-			System.out.println("object instanceof traceability status");
-			node.setTraceabilityStatus(TraceabilityStatus.get(value));
-		}*/
+		else if(ob instanceof TraceabilityStatus) {
+			node.getTraceabilityStatus().getLiteral();
+		}
 		//if the direct-edited object is and instance of traceability link
 		else if(ob instanceof Requirements) {
 			//TODO: add form to "add requirements"
@@ -111,6 +123,10 @@ public class DirectEditComponentGraphBtFeature extends AbstractDirectEditingFeat
 			return "Line breakes are not allowed in class names."; //$NON-NLS-1$
 
 		// null means, that the value is valid
+		return null;
+	}
+	
+	public String[] getPossibleValues(IDirectEditingContext context) {
 		return null;
 	}
 
@@ -185,12 +201,10 @@ public class DirectEditComponentGraphBtFeature extends AbstractDirectEditingFeat
 		}
 		//if the direct-edited object is an instance of operator
 		else if(object instanceof Operator) {
-			System.out.println("object instanceof operator");
 			node.setOperator(Operator.get(value));
 		}
 		//if the direct-edited object is and instance of traceability status
 		else if(object instanceof TraceabilityStatus) {
-			System.out.println("object instanceof traceability status");
 			node.setTraceabilityStatus(TraceabilityStatus.get(value));
 		}
 		//if the direct-edited object is and instance of traceability link

@@ -33,27 +33,28 @@ ICreateFeature {
 		StandardNode node = BehaviortreeFactory.eINSTANCE.createStandardNode();
 		resource.getContents().add(node);
 		
-		//set the operator as no operator
-		node.setOperator(Operator.NO_OPERATOR);
-		
 		Component c = BehaviortreeFactory.eINSTANCE.createComponent();
 	    c.setComponentName("DefaultComponent");
 	    node.setComponent(c);
 	    
 	    Behavior b = BehaviortreeFactory.eINSTANCE.createBehavior();
-	    c.getBehaviors().add(b);
+	    
 	    b.setBehaviorName("DefaultBehavior");
 	    node.setBehavior(b);
+	    c.getBehaviors().add(b);
 	    
 	    Requirements r = BehaviortreeFactory.eINSTANCE.createRequirements();
 		r.setKey("");
 		node.setTraceabilityLink(r);
+		
 		//set the traceability status as original
-		node.setTraceabilityStatus(TraceabilityStatus.ORIGINAL);
+		node.setTraceabilityStatus(TraceabilityStatus.IMPLIED);
+		
+		//set the operator as no operator
+		node.setOperator(Operator.NO_OPERATOR);
 		
 		//node.setBehaviorType(BehaviorType.STATE_REALIZATION);
 
-		
 		try {
 			try {
 				GraphBTUtil.saveToModelFile(r, getDiagram());

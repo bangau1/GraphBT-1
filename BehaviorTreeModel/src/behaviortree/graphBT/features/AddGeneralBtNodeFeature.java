@@ -159,7 +159,7 @@ IAddFeature {
             textTraceabilityStatus.setFont(gaService.manageDefaultFont(getDiagram(), false, false));
             gaService.setLocationAndSize(textTraceabilityStatus, 0, height/2 + 10, 40, 20);
             
-            //link(shapeTraceabilityStatus, node.getTraceabilityStatus());
+            link(shapeTraceabilityStatus, node.getTraceabilityStatus());
          
             IDirectEditingInfo directEditingInfo =
                 getFeatureProvider().getDirectEditingInfo();
@@ -178,7 +178,7 @@ IAddFeature {
             textOperator.setFont(gaService.manageDefaultFont(getDiagram(), false, false));
             gaService.setLocationAndSize(textOperator, 140, 5, 30, 20);
             
-            //link(shapeOperator, node.getOperator());
+            link(shapeOperator, node.getOperator());
             
             IDirectEditingInfo directEditingInfo =
                 getFeatureProvider().getDirectEditingInfo();

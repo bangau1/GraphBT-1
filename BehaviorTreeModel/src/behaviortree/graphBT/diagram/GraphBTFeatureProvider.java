@@ -57,7 +57,7 @@ public class GraphBTFeatureProvider extends DefaultFeatureProvider {
 	
 	@Override
 	public IAddFeature getAddFeature(IAddContext context) {
-		System.out.println("yeee masih masuk di addcontext");
+//		System.out.println("yeee masih masuk di addcontext");
 		if (context instanceof IAddConnectionContext /* && context.getNewObject() instanceof <DomainObject> */) {
 			return new AddGraphBtConnectionFeature(this);
 		} else if (context instanceof IAddContext /* && context.getNewObject() instanceof <DomainObject> */) {
@@ -70,7 +70,7 @@ public class GraphBTFeatureProvider extends DefaultFeatureProvider {
 	public IUpdateFeature getUpdateFeature(IUpdateContext context) {
 	    PictogramElement pictogramElement = context.getPictogramElement();
 	    Object bo = getBusinessObjectForPictogramElement(pictogramElement);
-	    System.out.println("yeee masih masuk di direct editnya feature provider!");
+//	    System.out.println("yeee masih masuk di direct editnya feature provider!");
 	    if (bo instanceof StandardNode) {
 			System.out.println("objeknya ternyata standar node");
 			return new UpdateGraphBtFeature(this);
@@ -112,14 +112,14 @@ public class GraphBTFeatureProvider extends DefaultFeatureProvider {
 	
 	@Override
 	public IDirectEditingFeature getDirectEditingFeature(IDirectEditingContext context) {
-		System.out.println("yeee masih masuk di direct T________T si echon");
+//		System.out.println("yeee masih masuk di direct T________T si echon");
 		PictogramElement pe = context.getPictogramElement();
 		PictogramElement pel = this.getDirectEditingInfo().getMainPictogramElement();
 		Object bo = getBusinessObjectForPictogramElement(pel);
 		
-		System.out.println("yeee masih masuk di direct T________T");
+		System.out.println("in feature provider direct edit");
 		if (bo instanceof StandardNode) {
-			System.out.println("yeee masih masuk di direct editnya feature provider!");
+//			System.out.println("yeee masih masuk di direct editnya feature provider!");
 			return new DirectEditComponentGraphBtFeature(this);
 		}
 		return super.getDirectEditingFeature(context);

@@ -71,7 +71,6 @@ public class CreateGraphBtConnectionFeature extends AbstractCreateConnectionFeat
         return null;
     }
     
-    
     private Edge createEdge(StandardNode source, StandardNode target) {
         Edge edge = BehaviortreeFactory.eINSTANCE.createEdge();
         
