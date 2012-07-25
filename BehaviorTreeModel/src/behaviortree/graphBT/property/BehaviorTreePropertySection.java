@@ -8,6 +8,7 @@ import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.ui.platform.GFPropertySection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -25,6 +26,8 @@ public class BehaviorTreePropertySection extends GFPropertySection
 	implements ITabbedPropertyConstants {
 	private Text componentText;
 	private Text behaviorText;
+	private CCombo operatorCombo;
+	private CCombo statusCombo;
 
     @Override
     public void createControls(Composite parent, 
@@ -36,38 +39,77 @@ public class BehaviorTreePropertySection extends GFPropertySection
 
         FormData componentData;
         FormData behaviorData;
-
+        FormData operatorData;
+        FormData statusData;
+        
         componentText = factory.createText(composite, "");
         behaviorText = factory.createText(composite, "");
+        operatorCombo = factory.createCCombo(composite);
+        statusCombo = factory.createCCombo(composite);
+        
+        behaviorText.addModifyListener(modifyListenerBehavior());
         componentText.addModifyListener(modifyListenerComponent());
         
+        for(TraceabilityStatus ts : TraceabilityStatus.VALUES) {
+        	statusCombo.add(ts.getName());
+	    }
+        
+        for(Operator ts : Operator.VALUES) {
+        	operatorCombo.add(ts.getName());
+	    }
+
         componentData = new FormData();
-        componentData.left = new FormAttachment(0, STANDARD_LABEL_WIDTH);
+        componentData.left = new FormAttachment(0, STANDARD_LABEL_WIDTH*2);
         componentData.right = new FormAttachment(100, 0);
         componentData.top = new FormAttachment(0, VSPACE);
-        componentData.bottom = new FormAttachment(behaviorText, VSPACE);
+        //componentData.bottom = new FormAttachment(behaviorText, VSPACE);
         componentText.setLayoutData(componentData);
 
-        CLabel valueLabel = factory.createCLabel(composite, "Component:");
+        CLabel valueLabel2 = factory.createCLabel(composite, "Component Name:");
         componentData = new FormData();
         componentData.left = new FormAttachment(0, 0);
         componentData.right = new FormAttachment(componentText, -HSPACE);
         componentData.top = new FormAttachment(componentText, 0, SWT.CENTER);
-        valueLabel.setLayoutData(componentData);
+        valueLabel2.setLayoutData(componentData);
         
-
         behaviorData = new FormData();
-        behaviorData.left = new FormAttachment(0, STANDARD_LABEL_WIDTH);
+        behaviorData.left = new FormAttachment(0, STANDARD_LABEL_WIDTH * 2);
         behaviorData.right = new FormAttachment(100, 0);
         behaviorData.top = new FormAttachment(componentText, VSPACE);
         behaviorText.setLayoutData(behaviorData);
-
-        CLabel valueLabel2 = factory.createCLabel(composite, "Behavior:");
+        
+        CLabel valueLabel3 = factory.createCLabel(composite, "Behavior Name:");
         behaviorData = new FormData();
         behaviorData.left = new FormAttachment(0, 0);
         behaviorData.right = new FormAttachment(behaviorText, -HSPACE);
-        behaviorData.top = new FormAttachment(componentText, 0, SWT.CENTER);
-        valueLabel2.setLayoutData(behaviorData);
+        behaviorData.top = new FormAttachment(behaviorText, 0, SWT.CENTER);
+        valueLabel3.setLayoutData(behaviorData);
+        
+        operatorData = new FormData();
+        operatorData.left = new FormAttachment(0, STANDARD_LABEL_WIDTH * 2);
+        operatorData.right = new FormAttachment(100, 0);
+        operatorData.top = new FormAttachment(behaviorText, VSPACE);
+        operatorCombo.setLayoutData(operatorData);
+        
+        CLabel valueLabel4 = factory.createCLabel(composite, "Operator Name:");
+        operatorData = new FormData();
+        operatorData.left = new FormAttachment(0, 0);
+        operatorData.right = new FormAttachment(operatorCombo, -HSPACE);
+        operatorData.top = new FormAttachment(operatorCombo, 0, SWT.CENTER);
+        valueLabel4.setLayoutData(operatorData);
+        
+        statusData = new FormData();
+        statusData.left = new FormAttachment(0, STANDARD_LABEL_WIDTH * 2);
+        statusData.right = new FormAttachment(100, 0);
+        statusData.top = new FormAttachment(operatorCombo, VSPACE);
+        statusCombo.setLayoutData(statusData);
+        
+        CLabel valueLabel5 = factory.createCLabel(composite, "Traceability Status Name");
+        statusData = new FormData();
+        statusData.left = new FormAttachment(0, 0);
+        statusData.right = new FormAttachment(statusCombo, -HSPACE);
+        statusData.top = new FormAttachment(statusCombo, 0, SWT.CENTER);
+        valueLabel5.setLayoutData(statusData);
 
     }
 
@@ -82,8 +124,8 @@ public class BehaviorTreePropertySection extends GFPropertySection
             if (bo == null)
                 return;
             
-            componentText.addModifyListener(modifyListenerComponent());
             behaviorText.addModifyListener(modifyListenerBehavior());
+            componentText.addModifyListener(modifyListenerComponent());
         }
     }
     

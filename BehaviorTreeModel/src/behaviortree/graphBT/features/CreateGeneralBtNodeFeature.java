@@ -61,17 +61,16 @@ ICreateFeature {
     public Object[] create(ICreateContext context) {
         
 		Resource resource = getDiagram().eResource();
-//		ResourceSet rs = resource.getResourceSet();
 		String wizardCarrier[] = new String[2];
 		
-		//invokeCreateStandardNodeWizard(wizardCarrier);
+		//invoke wizard
 		WizardDialog wizardDialog = new WizardDialog(PlatformUI.getWorkbench().
                 getActiveWorkbenchWindow().getShell(),
     		new CreateStandardNodeGraphBTWizard(wizardCarrier, getDiagram()));
     		
 		if (wizardDialog.open() != Window.OK) {
 			return null;
-		} 
+		}
 		
 		// Create a new node and add it to an EMF resource
 		StandardNode node = BehaviortreeFactory.eINSTANCE.createStandardNode();

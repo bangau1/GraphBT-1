@@ -3,7 +3,7 @@ Ant-Version: Apache Ant 1.8.2
 Created-By: 1.5.0_16-b02 (Sun Microsystems Inc.)
 Bundle-Name: %Bundle-Name
 Bundle-Activator: behaviortree.graphBT.Activator
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: %Bundle-Vendor
 Bundle-ManifestVersion: 2
 Bundle-Localization: plugin
