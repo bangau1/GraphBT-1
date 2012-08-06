@@ -43,12 +43,15 @@ import behaviortree.graphBT.wizards.createcomponent.CreateComponentGraphBTWizard
 public class ManageComponentsFirstPageGraphBTWizard extends WizardPage {
 
 	private Composite container;
-	private Composite container2;
 	private HashMap<Integer,String> map;
 	private Diagram d;
 	private String componentRefTemp;
 	private String behaviorRefTemp;
-
+	private Text editComponentNameText;
+	private Button saveComponentButton;
+	private Text editBehaviorNameText;
+	private Combo typeCombo;
+	private Button saveBehaviorButton;
 
 	public ManageComponentsFirstPageGraphBTWizard(HashMap<Integer,String> map, Diagram d) {
 		super("Manage Components Wizard");
@@ -110,7 +113,6 @@ public class ManageComponentsFirstPageGraphBTWizard extends WizardPage {
 					listComponents.add(component.getComponentName());
 				}
 			}
-
 		});
 
 		behaviorButton.addSelectionListener(new SelectionAdapter() {
@@ -141,13 +143,18 @@ public class ManageComponentsFirstPageGraphBTWizard extends WizardPage {
 		editComponentLabel.setText("Component Name");
 		editComponentLabel.setVisible(false);
 
-		final Text editcomponentNameText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		editcomponentNameText.setVisible(false);		
+		editComponentNameText = new Text(container, SWT.BORDER | SWT.SINGLE);
+		editComponentNameText.setVisible(false);
+		editComponentNameText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				dialogChanged();
+			}
+		});
 
 		final Text componentRefText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		componentRefText.setVisible(false);
 
-		final Button saveComponentButton = new Button(container, SWT.NULL);
+		saveComponentButton = new Button(container, SWT.NULL);
 		saveComponentButton.setText("Save");
 		saveComponentButton.setVisible(false);
 
@@ -162,7 +169,7 @@ public class ManageComponentsFirstPageGraphBTWizard extends WizardPage {
 					for(Behavior behavior: c.getBehaviors()){
 						listBehaviours.add(behavior.toString());
 					}
-				editcomponentNameText.setText(c.getComponentName());
+				editComponentNameText.setText(c.getComponentName());
 				componentRefTemp = c.getComponentRef();
 				System.out.println("test awal= " + componentRefTemp);
 			}
@@ -188,7 +195,7 @@ public class ManageComponentsFirstPageGraphBTWizard extends WizardPage {
 
 				final Command cmd = new RecordingCommand(ds.getEditingDomain(), "Nope") {
 					protected void doExecute() {
-						c.setComponentName(editcomponentNameText.getText());
+						c.setComponentName(editComponentNameText.getText());
 
 					}
 				};
@@ -196,7 +203,7 @@ public class ManageComponentsFirstPageGraphBTWizard extends WizardPage {
 
 
 				editComponentLabel.setVisible(false);
-				editcomponentNameText.setVisible(false);
+				editComponentNameText.setVisible(false);
 				saveComponentButton.setVisible(false);
 
 
@@ -215,11 +222,11 @@ public class ManageComponentsFirstPageGraphBTWizard extends WizardPage {
 				Component c = GraphBTUtil.getComponentByRef(GraphBTUtil.getBEModel(d), componentRefTemp);
 
 
-				editcomponentNameText.setText(c.getComponentName());
+				editComponentNameText.setText(c.getComponentName());
 				componentRefText.setText(c.getComponentRef());
 
 				editComponentLabel.setVisible(true);
-				editcomponentNameText.setVisible(true);
+				editComponentNameText.setVisible(true);
 				saveComponentButton.setVisible(true);
 			}
 
@@ -229,16 +236,26 @@ public class ManageComponentsFirstPageGraphBTWizard extends WizardPage {
 		editBehaviorLabel.setText("Behavior Name");
 		editBehaviorLabel.setVisible(false);
 
-		final Text editBehaviorNameText = new Text(container, SWT.BORDER | SWT.SINGLE);
+		editBehaviorNameText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		editBehaviorNameText.setVisible(false);		
-
+		editBehaviorNameText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				dialogChangedBehavior();
+			}
+		});
+		
 		final Label typeLabel = new Label(container, SWT.NULL);
 		typeLabel.setText("Behavior Type");
 		typeLabel.setVisible(false);
 
-		final Combo typeCombo = new Combo(container, SWT.BORDER | SWT.READ_ONLY);
+		typeCombo = new Combo(container, SWT.BORDER | SWT.READ_ONLY);
 		typeCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		typeCombo.setVisible(false);
+		typeCombo.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				dialogChangedBehavior();
+			}
+		});
 		
 		for(BehaviorType t : BehaviorType.VALUES) {
 			typeCombo.add(t.getName());
@@ -339,5 +356,54 @@ public class ManageComponentsFirstPageGraphBTWizard extends WizardPage {
 		});
 
 		setControl(container);
+	}
+	
+	private void dialogChanged() {
+		
+		if (editComponentNameText.getText().length() == 0) {
+			updateStatus("Component name must be specified");
+			saveComponentButton.setEnabled(false);
+			return;
+		}	
+
+		
+			updateStatus(null);
+	}
+	
+	private void updateStatus(String message) {
+		setErrorMessage(message);		
+		
+		if (message == null)
+		{
+			saveComponentButton.setEnabled(true);
+		}
+			
+	}
+	
+	private void dialogChangedBehavior() {
+		
+		if (typeCombo.getText().length() == 0) {
+			updateStatus("Behavior type must be specified");
+			return;
+		}
+		
+		if (editBehaviorNameText.getText().length() == 0) {
+			updateStatusBehavior("Behavior name must be specified");
+			saveBehaviorButton.setEnabled(false);
+			return;
+		}	
+
+		
+			updateStatus(null);
+	}
+	
+	private void updateStatusBehavior(String message) {
+		setErrorMessage(message);		
+		
+		if (message == null)
+		{
+			saveBehaviorButton.setEnabled(true);
+		}
+			
 	}
 }
