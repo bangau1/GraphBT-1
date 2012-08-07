@@ -620,7 +620,7 @@ public class ZestDebuggerView extends ViewPart implements IZoomableWorkbenchPart
 	private boolean error = false;
 	
 	private static final int ANIMATION_DELAY = 100;
-	private static final int EXECUTION_DELAY = 200;
+	private static final int EXECUTION_DELAY = 1000;
 	
 	public void save_Event() {
 		FileDialog fd = new FileDialog(ZestDebuggerView.this.getSite().getShell(), SWT.SAVE);
