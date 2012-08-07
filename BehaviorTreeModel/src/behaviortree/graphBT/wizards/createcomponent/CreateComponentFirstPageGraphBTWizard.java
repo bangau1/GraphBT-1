@@ -35,10 +35,9 @@ public class CreateComponentFirstPageGraphBTWizard extends WizardPage {
 
 	  
 	public CreateComponentFirstPageGraphBTWizard(HashMap<Integer,String> map, Diagram d) {
-		super("Create Component Wizard");
-		;
+		super("Create Component Wizard");		
 		setTitle("Create Component Wizard");
-		setDescription("Fill in the Behavior Tree node elements below.");
+		setDescription("Fill in the Component elements below.");
 		this.map = map;
 		this.d=d;
 	}
@@ -51,9 +50,10 @@ public class CreateComponentFirstPageGraphBTWizard extends WizardPage {
 		layout.numColumns = 2;
 
 	    final Label componentLabel = new Label(container, SWT.NULL);
-		componentLabel.setText("Component Name");
+		componentLabel.setText("Component Name:");
 		
 		componentNameText = new Text(container, SWT.BORDER | SWT.SINGLE);
+		componentNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		componentNameText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				dialogChanged();
@@ -61,16 +61,15 @@ public class CreateComponentFirstPageGraphBTWizard extends WizardPage {
 		});
 		
 		final Label componentRefLabel = new Label(container, SWT.NULL);
-		componentRefLabel.setText("Component Ref");
-		//componentRefLabel.setVisible(false);
+		componentRefLabel.setText("Component Ref:");		
 		
 		componentRefText = new Text(container, SWT.BORDER | SWT.SINGLE);
+		componentRefText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		componentRefText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				dialogChanged();
 			}
 		});
-		
 		
 		componentNameText.setText("");
 		
